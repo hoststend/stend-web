@@ -1,7 +1,7 @@
 {
     "name": "stend-web",
     "private": true,
-    "version": "1.0.5",
+    "version": "1.0.6",
     "rocVersion": "1.1.0",
     "scripts": {
         "dev": "node roc.js dev",
