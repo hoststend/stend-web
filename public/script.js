@@ -114,7 +114,9 @@ async function sendFile(file, isMultipleFiles=false, shareKey, expireTime){
 			// On envoie le chunk avec Axios (pour suivre la progression)
 			var sendChunk = await axios.put(`${apiBaseUrl}${chunkInfo.uploadPath}`, formData, {
 				onUploadProgress: progressEvent => {
+					console.log(progressEvent)
 					let percentCompleted = Math.round((alreadySentSize + progressEvent.loaded) * 100 / file.size)
+					console.log(percentCompleted)
 					document.getElementById('progress_bar').style.width = percentCompleted + '%'
 					document.getElementById('progress_text').innerText = percentCompleted + ' %'
 				}
@@ -183,7 +185,9 @@ async function sendAll(el){
 	}
 
 	// Copier le lien
-	navigator.clipboard.writeText(`${location.origin}/d.html?${finalShareKey || (sendedFiles.length < 2 ? sendedFiles?.[0]?.shareKey || shareKey : shareKey)}`)
+	try {
+		navigator.clipboard.writeText(`${location.origin}/d.html?${finalShareKey || (sendedFiles.length < 2 ? sendedFiles?.[0]?.shareKey || shareKey : shareKey)}`).catch(err => {})
+	} catch(e){}
 
 	// Afficher la section indiquant que le transfert est terminé
 	isSending = false
