@@ -25,6 +25,13 @@
 			"showFile": "public/download.html"
 		}
 	},
+	"/version.html": {
+		"options": {
+			"showFile": "public/version.html",
+			"disableTailwind": true,
+			"disableLiveReload": true
+		}
+	},
 	"/version": {
 		"options": {
 			"showFile": "public/version.html",
