@@ -66,6 +66,23 @@ html {
 		display: none;
 	}
 }
+@media (max-height: 670px) {
+	#secondZone_encryptionWarnText {
+		display: none;
+	}
+}
+@media screen and (max-height: 670px),
+screen and (max-width: 700px) {
+	#secondZone_explainText {
+		display: none;
+	}
+	#secondZone_selfhostText {
+		display: none;
+	}
+	#secondZone_encryptionWarnText {
+		display: none;
+	}
+}
 @media (max-height: 530px) {
 	#dropzone_explainText {
 		margin: 0;
