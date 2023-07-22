@@ -1,0 +1,44 @@
+<div id="dropzone" class="border-2 rounded-lg border-gris-200 max-[800px]:min-h-[99%] sm:h-3/4 dark:bg-base-100 grid p-4 xs:p-8 sm:p-12 items-center">
+	<div id="dropzone_sub">
+		<!-- Infos sur le fichier -->
+		<div class="flex space-x-4 sm:space-x-6 items-center">
+			<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 60 80" fill="none" id="fileInfo_svg">
+				<g clip-path="url(#clip0_22_63)">
+					<path d="M35 21.25V0H3.75C1.67188 0 0 1.67188 0 3.75V76.25C0 78.3281 1.67188 80 3.75 80H56.25C58.3281 80 60 78.3281 60 76.25V25H38.75C36.6875 25 35 23.3125 35 21.25ZM45 58.125C45 59.1562 44.1562 60 43.125 60H16.875C15.8438 60 15 59.1562 15 58.125V56.875C15 55.8438 15.8438 55 16.875 55H43.125C44.1562 55 45 55.8438 45 56.875V58.125ZM45 48.125C45 49.1562 44.1562 50 43.125 50H16.875C15.8438 50 15 49.1562 15 48.125V46.875C15 45.8438 15.8438 45 16.875 45H43.125C44.1562 45 45 45.8438 45 46.875V48.125ZM45 36.875V38.125C45 39.1562 44.1562 40 43.125 40H16.875C15.8438 40 15 39.1562 15 38.125V36.875C15 35.8438 15.8438 35 16.875 35H43.125C44.1562 35 45 35.8438 45 36.875ZM60 19.0469V20H40V0H40.9531C41.9531 0 42.9062 0.390625 43.6094 1.09375L58.9062 16.4062C59.6094 17.1094 60 18.0625 60 19.0469Z" fill="#1982C4"/>
+				</g>
+				<defs>
+					<clipPath><rect width="60" height="80" fill="white"/></clipPath>
+				</defs>
+			</svg>
+
+			<div>
+				<p id="fileInfo_title" class="text-base-200 dark:text-gris-100 font-semibold leading-snug truncateLine"></p>
+				<p id="fileInfo_subtitle" class="text-gris-400 dark:text-gris-300 truncateLine"></p>
+			</div>
+		</div>
+
+		<!-- Séparateur -->
+		<span class="block w-full h-0.5 bg-gris-200 dark:bg-gray-500 rounded-xl mt-6 mb-4"></span>
+
+		<!-- Options -->
+		<div>
+			<div>
+				<p class="text-base-200 dark:text-gris-100 font-semibold">Durée avant expiration ?</p>
+				<select id="options_expireTime" class="mt-2 select text-base-200 dark:text-gris-200 select-bordered border-gris-300 dark:border-gris-400 w-full">
+					<option value="10">10 minutes</option>
+					<option value="720">12 heures</option>
+					<option value="1440">1 jour</option>
+					<option value="10080">1 semaine</option>
+					<option value="43200">1 mois</option>
+				</select>
+			</div>
+
+			<div class="mt-4">
+				<p class="text-base-200 dark:text-gris-100 font-semibold">Clé de partage</p>
+				<input id="options_shareKey" type="text" placeholder="Facultatif, entre 1 et 30 caractères" class="mt-2 input input-bordered text-base-200 dark:text-gris-200 border-gris-300 dark:border-gris-400 w-full" maxlength="30"/>
+			</div>
+
+			<button onclick="sendAll(this)" type="button" class="mt-6 w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Transférer</button>
+		</div>
+	</div>
+</div>

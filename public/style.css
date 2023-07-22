@@ -1,0 +1,157 @@
+/* Ombre sur le conteneur principal */
+.shadowMainContainer {
+	box-shadow: 4px 6px 10px 1px rgba(0, 0, 0, 0.25);
+}
+@media (prefers-color-scheme: dark) {
+	.shadowMainContainer {
+		box-shadow: 1px 1px 6px 1px rgba(147, 51, 234, 0.15);
+	}
+}
+
+/* Safezone sur les iPhones borderless */
+html {
+	min-height: calc(100% + env(safe-area-inset-top));
+	padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+}
+
+/* Taille pour le SVG dans les infos d'un fichier */
+#fileInfo_svg {
+	min-width: 60px;
+	min-height: 80px;
+	max-width: 60px;
+	max-height: 80px;
+}
+@media (max-width: 1200px) {
+	#fileInfo_svg {
+		min-width: 40px;
+		min-height: 60px;
+		max-width: 40px;
+		max-height: 60px;
+	}
+}
+
+/* Tronquer un texte sur une ligne */
+.truncateLine {
+	display: -webkit-box;
+	-webkit-line-clamp: 1;
+	-webkit-box-orient: vertical;
+	overflow: hidden;
+	word-break: break-all;
+}
+
+/* Modifier le padding sur le topContainer */
+@media (min-height: 450px) {
+	#topContainer {
+			padding-top: 4rem;
+			padding-bottom: 4rem;
+	}
+}
+@media (min-height: 700px) {
+	#topContainer {
+			padding-top: 5rem;
+			padding-bottom: 5rem;
+	}
+}
+
+@media (min-width: 660px) {
+	#topContainer {
+			padding-top: 2rem;
+			padding-bottom: 2rem;
+	}
+}
+
+/* Masquer certains éléments en fonction de la hauteur de l'écran */
+@media (max-height: 650px) {
+	#secondZone_selfhostText {
+		display: none;
+	}
+}
+@media (max-height: 530px) {
+	#dropzone_explainText {
+		margin: 0;
+	}
+	#dropzone_svg {
+		width: 40%;
+		height: 40%;
+	}
+}
+@media (max-height: 485px) {
+	#dropzone_svg {
+		width: 30%;
+		height: 30%;
+	}
+}
+@media (max-height: 450px) {
+	#secondZone_encryptionWarnText {
+		display: none;
+	}
+	#dropzone_explainText {
+		display: none;
+	}
+	#dropzone_svg {
+		width: 45%;
+		height: 45%;
+	}
+}
+@media (max-height: 340px) {
+	#secondZone_explainText {
+		display: none;
+	}
+	#secondZone_title {
+		text-align: center;
+	}
+}
+
+/* Polices d'écritures */
+/* poppins-regular - latin */ @font-face {
+	font-display: swap;
+	font-family: 'Poppins';
+	font-style: normal;
+	font-weight: 400;
+	src: url('../fonts/poppins-v20-latin-regular.woff2') format('woff2');
+}
+
+/* poppins-700 - latin */
+@font-face {
+	font-display: swap;
+	font-family: 'Poppins';
+	font-style: normal;
+	font-weight: 700;
+	src: url('../fonts/poppins-v20-latin-700.woff2') format('woff2');
+}
+
+/* inter-regular - latin */
+@font-face {
+	font-display: swap;
+	font-family: 'Inter';
+	font-style: normal;
+	font-weight: 400;
+	src: url('../fonts/inter-v12-latin-regular.woff2') format('woff2');
+}
+
+/* inter-500 - latin */
+@font-face {
+	font-display: swap;
+	font-family: 'Inter';
+	font-style: normal;
+	font-weight: 500;
+	src: url('../fonts/inter-v12-latin-500.woff2') format('woff2');
+}
+
+/* inter-600 - latin */
+@font-face {
+	font-display: swap;
+	font-family: 'Inter';
+	font-style: normal;
+	font-weight: 600;
+	src: url('../fonts/inter-v12-latin-600.woff2') format('woff2');
+}
+
+/* inter-700 - latin */
+@font-face {
+	font-display: swap;
+	font-family: 'Inter';
+	font-style: normal;
+	font-weight: 700;
+	src: url('../fonts/inter-v12-latin-700.woff2') format('woff2');
+}

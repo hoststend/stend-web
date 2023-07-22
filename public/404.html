@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="fr" class="bg-gris-100 dark:bg-base-200 heropattern-topography-indigo-500 dark:heropattern-topography-violet-800">
+<head>
+	<!-- Propriétés importantes -->
+	<title>Stend</title>
+	<meta charset="UTF-8"/>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="icon" type="image/png" href="favicon.png">
+
+	<!-- Meta tag -->
+	<meta property="og:title" content="Stend">
+	<meta property="og:description" content="Stend vous permet d'envoyer des fichiers via un simple lien d'accès qui expire lorsque vous l'aurez décidé.">
+	<meta name="title" content="Stend">
+	<meta name="description" content="Stend vous permet d'envoyer des fichiers via un simple lien d'accès qui expire lorsque vous l'aurez décidé.">
+</head>
+<body class="absolute inset-0"> <!--Comment j'ai pas connu cette méthode pour remplacer le "h-screen" avant ??? -->
+	<!-- Conteneur principal -->
+	<div id="topContainer" class="h-full xs:px-2 sm:px-4 md:px-10 lg:px-20">
+		<div class="grid items-center h-full text-center bg-gris-100 shadowMainContainer xs:rounded-xl dark:bg-base-200 justify-items-center">
+			<div class="px-6 py-1">
+				<h1 class="leading-9 text-base-200 dark:text-gris-100 font-semibold text-3xl sm:text-4xl">Oups...</h1>
+				<p class="leading-3 select-none">&nbsp;</p><p class="leading-7 text-gris-400 dark:text-gris-300 text-md sm:text-lg">On dirait bien que cette page n'existe pas. Assure-toi qu'il n'y ait aucune faute dans l'URL.</p>
+				<p class="leading-5 select-none">&nbsp;</p><button onclick="location.href = '/'" class="bg-blue-700 dark:bg-blue-500 text-white text-center w-full sm:w-2/3 font-semibold p-2 rounded-lg">Aller à l'accueil</button>
+			</div>
+		</div>
+	</div>
+
+	<!-- Footer -->
+	<div class="invisible xs:visible">
+		<div class="absolute bottom-0 right-0 text-sm text-gray-700 bg-gris-100 rounded-tl-lg dark:text-gris-100 dark:bg-base-200">
+			<a class="hover:underline" href="https://github.com/johan-perso/stend-web"><p class="px-2 py-1">Repo GitHub</p></a>
+		</div>
+	</div>
+</body>
+</html>

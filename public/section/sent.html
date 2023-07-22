@@ -1,0 +1,13 @@
+<div id="dropzone" class="border-2 rounded-lg border-gris-200 max-[800px]:min-h-[99%] sm:h-3/4 dark:bg-base-100 grid p-4 xs:p-8 sm:p-12 items-center">
+	<div id="dropzone_sub">
+		<!-- Textes -->
+		<p class="text-center text-2xl md:text-xl min-[1070px]:text-2xl xl:text-3xl text-base-200 dark:text-gris-100 font-semibold sm:leading-relaxed">Votre fichier est envoyé<span class="max-[835px]:hidden"> !</span></p>
+		<p class="mt-2 min-[1300px]:text-lg min-[1500px]:text-xl text-center text-gris-400 dark:text-gris-300">Utiliser ce lien pour partager votre fichier<span class="max-[800px]:hidden">, ou scanner le QR Code</span>.</p>
+
+		<!-- Elements -->
+		<div>
+			<input id="share_url" type="url" class="mt-4 input input-bordered text-base-200 dark:text-gray-200 border-gris-300 dark:border-gris-400 w-full" readonly/>
+			<button onclick="this.setAttribute('disabled', 'true'); location.reload()" type="button" class="mt-6 w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg min-[860px]:text-lg px-5 py-2.5 mr-2 mb-2 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Envoyer un autre fichier</button>
+		</div>
+	</div>
+</div>

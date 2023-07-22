@@ -1,0 +1,28 @@
+<div id="dropzone" class="border-2 rounded-lg border-gris-200 max-[800px]:min-h-[99%] sm:h-3/4 dark:bg-base-100 grid p-4 xs:p-8 sm:p-12 items-center">
+	<div id="dropzone_sub">
+		<!-- Infos sur le fichier -->
+		<div class="flex space-x-4 sm:space-x-6 items-center">
+			<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 60 80" fill="none" id="fileInfo_svg">
+				<g clip-path="url(#clip0_22_63)">
+					<path d="M35 21.25V0H3.75C1.67188 0 0 1.67188 0 3.75V76.25C0 78.3281 1.67188 80 3.75 80H56.25C58.3281 80 60 78.3281 60 76.25V25H38.75C36.6875 25 35 23.3125 35 21.25ZM45 58.125C45 59.1562 44.1562 60 43.125 60H16.875C15.8438 60 15 59.1562 15 58.125V56.875C15 55.8438 15.8438 55 16.875 55H43.125C44.1562 55 45 55.8438 45 56.875V58.125ZM45 48.125C45 49.1562 44.1562 50 43.125 50H16.875C15.8438 50 15 49.1562 15 48.125V46.875C15 45.8438 15.8438 45 16.875 45H43.125C44.1562 45 45 45.8438 45 46.875V48.125ZM45 36.875V38.125C45 39.1562 44.1562 40 43.125 40H16.875C15.8438 40 15 39.1562 15 38.125V36.875C15 35.8438 15.8438 35 16.875 35H43.125C44.1562 35 45 35.8438 45 36.875ZM60 19.0469V20H40V0H40.9531C41.9531 0 42.9062 0.390625 43.6094 1.09375L58.9062 16.4062C59.6094 17.1094 60 18.0625 60 19.0469Z" fill="#1982C4"/>
+				</g>
+				<defs>
+					<clipPath><rect width="60" height="80" fill="white"/></clipPath>
+				</defs>
+			</svg>
+
+			<div>
+				<p id="fileInfo_title" class="text-base-200 dark:text-gris-100 font-semibold leading-snug truncateLine"></p>
+				<p id="fileInfo_subtitle" class="text-gris-400 dark:text-gris-300 truncateLine"></p>
+			</div>
+		</div>
+
+		<!-- Progression -->
+		<div class="mt-8">
+			<span id="progress_text" class="font-semibold text-blue-500">Initialisation...</span>
+			<div class="mt-1 w-full bg-gris-200/50 rounded-full h-2.5 dark:bg-gray-700">
+				<div id="progress_bar" class="bg-blue-700 dark:bg-blue-500 h-2.5 rounded-full" style="width: 0%"></div>
+			</div>
+		</div>
+	</div>
+</div>

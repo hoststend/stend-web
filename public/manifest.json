@@ -1,0 +1,19 @@
+{
+	"theme_color": "#16161E",
+	"background_color": "#16161E",
+	"display": "standalone",
+	"scope": "/",
+	"id": "/",
+	"start_url": "/",
+	"name": "Stend",
+	"short_name": "Stend",
+	"description": "Envoyer ou télécharger un fichier, rapidement, facilement, gratuitement.",
+	"icons": [
+		{
+			"src": "icon_maskable.png",
+			"sizes": "1024x1024",
+			"type": "image/png",
+			"purpose": "maskable"
+		}
+	]
+}

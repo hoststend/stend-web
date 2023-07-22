@@ -1,0 +1,35 @@
+{
+	"/section/optionsBeforeSend.html": {
+		"options": {
+			"disableLiveReload": true,
+			"disableTailwind": true,
+			"showFile": "public/section/optionsBeforeSend.html"
+		}
+	},
+	"/section/sending.html": {
+		"options": {
+			"disableLiveReload": true,
+			"disableTailwind": true,
+			"showFile": "public/section/sending.html"
+		}
+	},
+	"/section/sent.html": {
+		"options": {
+			"disableLiveReload": true,
+			"disableTailwind": true,
+			"showFile": "public/section/sent.html"
+		}
+	},
+	"/d.html": {
+		"options": {
+			"showFile": "public/download.html"
+		}
+	},
+	"/version": {
+		"options": {
+			"showFile": "public/version.html",
+			"disableTailwind": true,
+			"disableLiveReload": true
+		}
+	}
+}
