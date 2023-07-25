@@ -28,6 +28,64 @@ function removeLoading(){
 	document.getElementById('container').classList.remove('hidden')
 }
 
+// Fonction pour échapper les caractères spéciaux
+function escapeHtml(text){
+	if(!text) return text
+	if(typeof text != 'string') return text
+	return text?.replace(/&/g, '&amp;')?.replace(/</g, '&lt;')?.replace(/>/g, '&gt;')?.replace(/"/g, '&quot;')?.replace(/'/g, '&#039;')
+}
+
+// Ajouter un fichier à l'historique
+function addFileToHistory(file){
+	console.log('adding to historic: ', file)
+	// Obtenir l'historique
+	let history
+	try {
+		history = JSON.parse(localStorage.getItem("history") || '[]')
+	} catch(e){
+		history = []
+		localStorage.setItem("history", JSON.stringify(history))
+	}
+	if(!Array.isArray(history)){
+		history = []
+		localStorage.setItem("history", JSON.stringify(history))
+	}
+
+	// Supprimer les entrées expirées et les 5 plus récentes entrées
+	history = history.filter(entry => entry.expireDate > Date.now())
+	history = history.slice(-4)
+
+	// Ajouter le fichier à l'historique
+	history.push({
+		name: file.name,
+		shareKey: file.shareKey,
+		expireDate: file.expireDate
+	})
+	localStorage.setItem("history", JSON.stringify(history))
+}
+
+// Obtenir l'historique
+function getHistory(){
+	// Obtenir l'historique
+	let history
+	try {
+		history = JSON.parse(localStorage.getItem("history") || '[]')
+	} catch(e){
+		history = []
+		localStorage.setItem("history", JSON.stringify(history))
+	}
+	if(!Array.isArray(history)){
+		history = []
+		localStorage.setItem("history", JSON.stringify(history))
+	}
+
+	// Supprimer les entrées expirées
+	history = history.filter(entry => entry.expireDate > Date.now())
+
+	// Retourner les 4 dernières entrées
+	return history.slice(-4).reverse()
+}
+
 // Vérifier si un mot de passe est valide
 async function checkPassword(password){
 	let res = await fetch(`${apiBaseUrl}/checkPassword`, {
@@ -109,6 +167,12 @@ async function sendFile(file, isMultipleFiles=false, shareKey, expireTime){
 
 				// On ajoute le fichier au FormData
 				formData.append('file', chunkFile)
+
+				// Afficher la progression sur ce chunk
+				let percentCompleted = Math.round((alreadySentSize) * 100 / file.size)
+				console.log(percentCompleted)
+				document.getElementById('progress_bar').style.width = percentCompleted + '%'
+				document.getElementById('progress_text').innerText = percentCompleted + `% | ${i+1}/${createTransfert.chunks.length} chunk${createTransfert.chunks.length > 1 ? 's' : ''}`
 			}
 
 			// On envoie le chunk avec Axios (pour suivre la progression)
@@ -118,7 +182,7 @@ async function sendFile(file, isMultipleFiles=false, shareKey, expireTime){
 					let percentCompleted = Math.round((alreadySentSize + progressEvent.loaded) * 100 / file.size)
 					console.log(percentCompleted)
 					document.getElementById('progress_bar').style.width = percentCompleted + '%'
-					document.getElementById('progress_text').innerText = percentCompleted + ' %'
+					document.getElementById('progress_text').innerText = percentCompleted + `% | ${i+1}/${createTransfert.chunks.length} chunk${createTransfert.chunks.length > 1 ? 's' : ''}`
 				}
 			}).then(res => res.data).catch(err => { return { error:true, message: `${err.error || err.message || err}. Note : l'erreur "failed to fetch" peut apparaître si vous essayez d'envoyer un dossier.` } })
 			alreadySentSize += chunkInfo.size
@@ -130,7 +194,14 @@ async function sendFile(file, isMultipleFiles=false, shareKey, expireTime){
 			if(sendChunk.error || sendChunk.statusCode) return alert("Une erreur est survenue lors de l'envoi d'un chunk : " + sendChunk.message || sendChunk.error || sendChunk.statusCode || sendChunk)
 
 			// Au contraire, si le fichier est envoyé
-			else if(sendChunk) resolve(sendChunk)
+			else if(sendChunk){
+				addFileToHistory({
+					name: file.name,
+					shareKey: sendChunk.shareKey,
+					expireDate: sendChunk.expireDate
+				})
+				resolve(sendChunk)
+			}
 		}
 	})
 }
@@ -176,7 +247,7 @@ async function sendAll(el){
 				sharekeys: sendedFiles.map(file => file.shareKey).join(','),
 			})
 		}).then(res => res.json())
-		
+
 		// Si on a une erreur
 		if(mergeTransferts.error || mergeTransferts.statusCode) return alert("Une erreur est survenue lors de la fusion des transferts : " + mergeTransferts.message || mergeTransferts.error || mergeTransferts.statusCode || mergeTransferts)
 
@@ -192,8 +263,10 @@ async function sendAll(el){
 	// Afficher la section indiquant que le transfert est terminé
 	isSending = false
 	while(!sections['sent']) await new Promise(resolve => setTimeout(resolve, 300)) // attendre que la section soit importée
-	document.getElementById('secondZone_selfhostText').remove()
-	document.getElementById('secondZone_encryptionWarnText').remove()
+	try {
+		document.getElementById('secondZone_selfhostText').remove()
+		document.getElementById('secondZone_encryptionWarnText').remove()
+	} catch(e){}
 	document.getElementById('secondZone_title').insertAdjacentHTML('beforebegin', `<img class="mx-auto mb-4 rounded-sm max-[800px]:hidden" src="https://chart.googleapis.com/chart?cht=qr&chs=192x192&chld=L|0&chl=${encodeURIComponent(location.origin)}/d.html?${encodeURIComponent(finalShareKey || (sendedFiles.length < 2 ? sendedFiles?.[0]?.shareKey || shareKey : shareKey))}" alt="QR Code">`)
 	document.getElementById('dropzone').outerHTML = sections['sent']
 	document.getElementById('share_url').value = `${location.origin}/d.html?${finalShareKey || (sendedFiles.length < 2 ? sendedFiles?.[0]?.shareKey || shareKey : shareKey)}`
@@ -216,7 +289,7 @@ window.onload = async function(){
 console.log(serverInstance)
 
 	// Afficher un avertissement si on a pas la même version
-	if(serverInstance != '' && serverInstance.apiVersion != '1.0.0') alert(`Le serveur utilise une version différente de ce site. Certaines fonctionnalités peuvent ne pas fonctionner correctement.`)
+	if(serverInstance != '' && serverInstance.apiVersion != '1.1.0') alert(`Le serveur utilise une version différente de ce site. Certaines fonctionnalités peuvent ne pas fonctionner correctement.`)
 
 	// Si on a besoin d'un mot de passe
 	if(authRequired){
@@ -298,6 +371,7 @@ console.log(serverInstance)
 			document.getElementById('secondZone').classList.add('max-[800px]:hidden')
 			document.getElementById('container').classList.remove('max-[800px]:grid-rows-minGridMainContainer')
 			document.getElementById('dropzone').outerHTML = sections['optionsBeforeSend']
+			if(serverInstance?.recommendedExpireTimes) document.getElementById('options_expireTime').innerHTML = serverInstance.recommendedExpireTimes.map(time => `<option value="${time.value}">${time.label}</option>`).join('')
 			document.getElementById('fileInfo_title').innerText = filesToSend[0].name
 			document.getElementById('fileInfo_subtitle').innerText = filesToSend.length > 1 ? `et ${filesToSend.length - 1} ${filesToSend.length - 1 > 1 ? 'autres fichiers' : 'autre fichier'} | ${formatBytes(filesToSend.reduce((acc, file) => acc + file.size, 0))}` : formatBytes(filesToSend[0].size)
 		})
@@ -317,6 +391,22 @@ console.log(serverInstance)
 	// Enlever l'animation de chargement
 	removeLoading()
 
+	// Afficher l'historique des fichiers
+	let history = getHistory()
+	if(history.length > 0 && window.innerWidth >= 810){
+		code = ''
+		for(let i = 0; i < history.length; i++){
+			var fileInfo = history[i]
+			code += `<div id="secondZone_selfhostText" class="relative mt-4 border-2 rounded-lg border-gris-200 max-[800px]:min-h-[99%] sm:h-3/4 flex justify-between px-2 xs:px-4 sm:px-6 md:px-8 py-5">
+			<div class="text-left">
+				<p class="text-base-200 dark:text-gris-100 text-sm sm:text-base font-semibold leading-snug truncateLine">${escapeHtml(fileInfo.name)}</p>
+				<a href="${location.origin}/d.html?${fileInfo.shareKey}" class="text-blue-500 dark:text-blue-400 text-xs sm:text-sm font-semibold leading-snug truncateLine">${location.origin.replace('http://','').replace('https://','')}/d.html?${fileInfo.shareKey}</a>
+			</div>
+		</div>`
+		}
+		document.getElementById('secondZone_subtitle').innerHTML = code
+	}
+
 	// Importer Axios
 	var script = document.createElement('script')
 	script.setAttribute('fetchpriority', 'low')
@@ -328,4 +418,12 @@ console.log(serverInstance)
 	window.onbeforeunload = function(e){
 		if(isSending) return true
 	}
+
+	// Quand on appuie sur ctrl+enter ou shift+enter, on envoie les fichiers
+	document.addEventListener('keydown', e => {
+		if((e.ctrlKey || e.shiftKey) && e.key == 'Enter' && !isSending && document.getElementById('clickToSendAll')){
+			e.preventDefault()
+			sendAll(document.getElementById('clickToSendAll'))
+		}
+	})
 }
