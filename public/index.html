@@ -31,7 +31,7 @@
 	<div id="topContainer" class="h-full xs:px-2 sm:px-4 md:px-10 lg:px-20">
 		<div class="grid items-center h-full bg-gris-100 shadowMainContainer xs:rounded-xl dark:bg-base-200 justify-items-center">
 			<!-- Conteneur -->
-			<div id="container" class="hidden min-[801px]:grid-cols-gridMainContainer max-[800px]:grid-rows-minGridMainContainer max-[590px]:grid-rows-1 gap-4 min-[620px]:gap-8 min-[900px]:gap-16 lg:gap-24 h-full items-center px-1 2xs:px-4 min-[370px]:px-8 py-4 w-full">
+			<div id="container" class="hidden min-[801px]:grid-cols-gridMainContainer max-[800px]:grid-rows-minGridMainContainer max-[590px]:grid-rows-1 gap-4 min-[620px]:gap-8 min-[900px]:gap-16 lg:gap-24 h-full items-center px-1 2xs:px-4 min-[370px]:px-8 py-4 w-full overflow-y-auto">
 				<!-- Zone de glisser-déposer -->
 				<div id="dropzone" class="border-2 border-dashed rounded-lg border-gris-200 max-[800px]:min-h-[99%] sm:h-3/4 dark:bg-base-100 text-center grid justify-items-center items-center">
 					<div id="dropzone_sub">
@@ -49,9 +49,9 @@
 				</div>
 
 				<!-- Zone secondaire -->
-				<div id="secondZone" class="max-[590px]:hidden overflow-hidden">
+				<div id="secondZone" class="max-[590px]:hidden overflow-hidden py-1">
 					<h3 id="secondZone_title" class="font-poppins font-bold text-2xl 2xl:text-4xl 3xl:text-5xl leading-10 2xl:leading-12 3xl:leading-14 text-base-200 dark:text-gris-100">Stend, partage de fichiers jusqu'à <u id="secondZone_title_size">{{ process.env.FILE_MAX_SIZE }}</u> / fichier</h3>
-					<p class="text-lg 3xl:text-2xl leading-7 text-gris-400 dark:text-gris-300">
+					<p id="secondZone_subtitle" class="overflow-y-hidden text-lg 3xl:text-2xl leading-7 text-gris-400 dark:text-gris-300">
 						<span id="secondZone_explainText"><br>Stend vous permet d'envoyer des fichiers via un simple lien d'accès qui expire lorsque vous l'aurez décidé.</span>
 						<span id="secondZone_selfhostText" class="max-[820px]:hidden"><br><br>Vous pouvez installer le serveur de Stend sur votre propre infrastructure, pour vous assurer que vos données ne soient jamais volées !</span>
 						<span id="secondZone_encryptionWarnText"><br><br>Note : actuellement, les fichiers envoyés ne sont pas encore chiffrés sur le serveur.</span>
