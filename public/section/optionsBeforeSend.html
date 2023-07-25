@@ -30,6 +30,7 @@
 					<option value="1440">1 jour</option>
 					<option value="10080">1 semaine</option>
 					<option value="43200">1 mois</option>
+					<!-- Ces valeurs seront remplacés plus tard par le JS si on en trouve dans la réponse de l'API -->
 				</select>
 			</div>
 
@@ -38,7 +39,7 @@
 				<input id="options_shareKey" type="text" placeholder="Facultatif, entre 1 et 30 caractères" class="mt-2 input input-bordered text-base-200 dark:text-gris-200 border-gris-300 dark:border-gris-400 w-full" maxlength="30"/>
 			</div>
 
-			<button onclick="sendAll(this)" type="button" class="mt-6 w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Transférer</button>
+			<button id="clickToSendAll" onclick="sendAll(this)" type="button" class="mt-6 w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Transférer</button>
 		</div>
 	</div>
 </div>
