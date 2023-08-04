@@ -61,7 +61,7 @@ async function downloadAll(el){
 	el.setAttribute('disabled', true)
 
 	// Si on a accès à l'API File System (Chromium)
-	if(window.showSaveFilePicker && window.showDirectoryPicker){
+	if(window.showDirectoryPicker){
 		// Importer Material Toast
 		var script = document.createElement('script')
 		script.setAttribute('fetchpriority', 'high')
@@ -74,6 +74,7 @@ async function downloadAll(el){
 		// Créer un répertoire
 		var dirHandle = await showDirectoryPicker({ mode: 'readwrite' }).catch(err => {
 			mdtoast("Vous devez autoriser l'accès à un dossier pour télécharger tous les fichiers.")
+			window.showDirectoryPicker = null
 			return null
 		})
 
