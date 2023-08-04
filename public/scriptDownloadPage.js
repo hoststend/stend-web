@@ -42,7 +42,7 @@ function addFile(fileInfo){
 		<p class="text-base-200 dark:text-gris-100 text-sm sm:text-base font-semibold leading-snug truncateLine">${escapeHtml(fileInfo.fileName)}</p>
 		<p class="text-gris-400 text-sm sm:text-base dark:text-gris-300 truncateLine">${escapeHtml(formatBytes(fileInfo.fileSize))}</p>
 	</div>
-	<svg onclick="download('${allFiles.indexOf(fileInfo)}')" xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 64 64" fill="none" tabindex="0">
+	<svg onclick="downloadFile('${allFiles.indexOf(fileInfo)}')" xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 64 64" fill="none" tabindex="0">
 		<g clip-path="url(#clip0_26_322)"><path d="M36 4C36 1.7875 34.2125 0 32 0C29.7875 0 28 1.7875 28 4V34.3375L18.825 25.1625C17.2625 23.6 14.725 23.6 13.1625 25.1625C11.6 26.725 11.6 29.2625 13.1625 30.825L29.1625 46.825C30.725 48.3875 33.2625 48.3875 34.825 46.825L50.825 30.825C52.3875 29.2625 52.3875 26.725 50.825 25.1625C49.2625 23.6 46.725 23.6 45.1625 25.1625L36 34.3375V4ZM8 44C3.5875 44 0 47.5875 0 52V56C0 60.4125 3.5875 64 8 64H56C60.4125 64 64 60.4125 64 56V52C64 47.5875 60.4125 44 56 44H43.3125L37.65 49.6625C34.525 52.7875 29.4625 52.7875 26.3375 49.6625L20.6875 44H8ZM54 51C54.7957 51 55.5587 51.3161 56.1213 51.8787C56.6839 52.4413 57 53.2043 57 54C57 54.7957 56.6839 55.5587 56.1213 56.1213C55.5587 56.6839 54.7957 57 54 57C53.2043 57 52.4413 56.6839 51.8787 56.1213C51.3161 55.5587 51 54.7957 51 54C51 53.2043 51.3161 52.4413 51.8787 51.8787C52.4413 51.3161 53.2043 51 54 51Z" fill="#1982C4"/></g>
 		<defs><clipPath><rect width="64" height="64" fill="white"/></clipPath></defs>
 	</svg>
@@ -50,17 +50,53 @@ function addFile(fileInfo){
 }
 
 // Télécharger un fichier
-function download(pos){
+function downloadFile(pos){
 	var file = allFiles[pos]
 	location.href = apiBaseUrl + file.downloadLink
 }
 
 // Télécharger tous les fichiers
-function downloadAll(el){
+async function downloadAll(el){
+	// Désactiver le bouton pour éviter qu'on puisse spam
 	el.setAttribute('disabled', true)
-	allFiles.forEach(file => {
-		window.open(apiBaseUrl + file.downloadLink)
+
+	// Si on a accès à l'API File System (Chromium)
+	if(window.showSaveFilePicker && window.showDirectoryPicker){
+		// Importer Material Toast
+		var script = document.createElement('script')
+		script.setAttribute('fetchpriority', 'high')
+		script.setAttribute('src', 'mdtoast.js')
+		document.head.appendChild(script)
+
+		// Attendre que le script soit chargé
+		await new Promise(resolve => script.onload = resolve)
+
+		// Créer un répertoire
+		var dirHandle = await showDirectoryPicker({ mode: 'readwrite' }).catch(err => {
+			mdtoast("Vous devez autoriser l'accès à un dossier pour télécharger tous les fichiers.")
+			return null
+		})
+
+		// Télécharger chaque fichier
+		if(dirHandle) for(var i = 0; i < allFiles.length; i++){
+			var file = allFiles[i]
+			var fileHandle = await dirHandle.getFileHandle(file.fileName, { create: true })
+			var writable = await fileHandle.createWritable()
+			if(i == 0) mdtoast(`Début du téléchargement...`)
+			await fetch(apiBaseUrl + file.downloadLink).then(res => res.body.pipeTo(writable))
+			if(i == allFiles.length - 1) try { mdtoast("Tous les fichiers ont été téléchargés.") } catch(err) {
+				setTimeout(() => mdtoast("Tous les fichiers ont été téléchargés."), 1000) // parfois quand on utilise trop la fonction en un court temps ça provoque une erreur
+			}
+			else if(allFiles.length > 1) mdtoast(`${i + 1} fichiers téléchargés sur ${allFiles.length}.`)
+		}
+	}
+
+	// Sinon, ouvrir chaque fichier dans un nouvel onglet
+	else allFiles.forEach(file => {
+		window.open(apiBaseUrl + file.downloadLink, '_blank')
 	})
+
+	// Réactiver le bouton
 	setTimeout(() => el.removeAttribute('disabled'), 500)
 }
 
