@@ -60,17 +60,17 @@ async function downloadAll(el){
 	// Désactiver le bouton pour éviter qu'on puisse spam
 	el.setAttribute('disabled', true)
 
+	// Importer Material Toast
+	var script = document.createElement('script')
+	script.setAttribute('fetchpriority', 'high')
+	script.setAttribute('src', 'mdtoast.js')
+	document.head.appendChild(script)
+
+	// Attendre que le script soit chargé
+	await new Promise(resolve => script.onload = resolve)
+
 	// Si on a accès à l'API File System (Chromium)
 	if(window.showDirectoryPicker){
-		// Importer Material Toast
-		var script = document.createElement('script')
-		script.setAttribute('fetchpriority', 'high')
-		script.setAttribute('src', 'mdtoast.js')
-		document.head.appendChild(script)
-
-		// Attendre que le script soit chargé
-		await new Promise(resolve => script.onload = resolve)
-
 		// Créer un répertoire
 		var dirHandle = await showDirectoryPicker({ mode: 'readwrite' }).catch(err => {
 			mdtoast("Vous devez autoriser l'accès à un dossier pour télécharger tous les fichiers.")
@@ -92,10 +92,48 @@ async function downloadAll(el){
 		}
 	}
 
-	// Sinon, ouvrir chaque fichier dans un nouvel onglet
-	else allFiles.forEach(file => {
-		window.open(apiBaseUrl + file.downloadLink, '_blank')
-	})
+	// Sinon, on va créer une archive
+	else {
+		// Importer JSZip
+		var script = document.createElement('script')
+		script.setAttribute('fetchpriority', 'high')
+		script.setAttribute('src', 'jszip.min.js')
+		document.head.appendChild(script)
+
+		// Attendre que le script soit chargé
+		await new Promise(resolve => script.onload = resolve)
+
+		// Créer une archive
+		var zip = new JSZip()
+
+		// Pour chaque fichier
+		for(var i = 0; i < allFiles.length; i++){
+			// Obtenir le fichier
+			var file = allFiles[i]
+
+			// Télécharger le fichier
+			await fetch(apiBaseUrl + file.downloadLink).then(res => res.blob()).then(blob => {
+				// Ajouter le fichier à l'archive
+				zip.file(file.fileName, blob, { binary: true })
+
+				// Afficher des toasts
+				if(i == 0) mdtoast(`Début du téléchargement...`)
+				else if(i == allFiles.length - 1) try { mdtoast("Tous les fichiers ont été téléchargés. Finalisation...") } catch(err) {
+					setTimeout(() => mdtoast("Tous les fichiers ont été téléchargés. Finalisation..."), 1000) // parfois quand on utilise trop la fonction en un court temps ça provoque une erreur
+				}
+				else if(allFiles.length > 1) mdtoast(`${i + 1} fichiers téléchargés sur ${allFiles.length}.`)
+			})
+		}
+
+		// Quand tous les fichiers sont téléchargés
+		zip.generateAsync({ type: 'blob' }).then(blob => {
+			// Télécharger l'archive
+			var link = document.createElement('a')
+			link.href = URL.createObjectURL(blob)
+			link.download = 'download.zip'
+			link.click()
+		})
+	}
 
 	// Réactiver le bouton
 	setTimeout(() => el.removeAttribute('disabled'), 500)
