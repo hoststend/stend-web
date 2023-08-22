@@ -1,11 +1,11 @@
-FROM node:18
+FROM node:16
 WORKDIR /usr/src/app
 
 COPY package*.json ./
 RUN npm install
 
 COPY . .
-EXPOSE 80
-ENV PORT=80
+RUN npm run build
+EXPOSE 3000
 
-CMD [ "node", "roc.js", "start" ]
+CMD [ "npm", "start" ]
