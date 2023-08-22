@@ -9,7 +9,7 @@ const chalk = require('chalk')
 const boxen = require('boxen')
 const ora = require('ora'), spinner = ora()
 require('dotenv').config()
-process.stdin.setRawMode(false); // j'sais même pas comment mais ça règle v'là les problèmes avec les raccourcis clavier (genre CTRL+C qui quitte le programme nativement)
+if(process.isTTY) process.stdin.setRawMode(false); // j'sais même pas comment mais ça règle v'là les problèmes avec les raccourcis clavier (genre CTRL+C qui quitte le programme nativement)
 
 // Lire le fichier de configuration
 spinner.start('Préparation avant démarrage...') // afficher un spinner pour montrer que le programme est en cours d'exécution
