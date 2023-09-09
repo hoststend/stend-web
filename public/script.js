@@ -1,4 +1,5 @@
 // Quelques variables
+var stendApiVersion = 12 // v1.2.0 --> 12 // TODO: doit être changer à chaque release de l'API
 var authPassword = localStorage.getItem("authPassword")
 var apiBaseUrl = document.head.getAttribute('apibaseurl')
 var authRequired
@@ -286,10 +287,10 @@ window.onload = async function(){
 		document.getElementById('dropzone_explainText').removeAttribute('id')
 	}
 	authRequired = serverInstance.requirePassword
-console.log(serverInstance)
 
 	// Afficher un avertissement si on a pas la même version
-	if(serverInstance != '' && serverInstance.apiVersion != '1.1.0') alert(`Le serveur utilise une version différente de ce site. Certaines fonctionnalités peuvent ne pas fonctionner correctement.`)
+	var apiVersion = parseInt(`${serverInstance.apiVersion.split('.')[0]}${serverInstance.apiVersion.split('.')[1]}`)
+	if(serverInstance != '' && apiVersion != stendApiVersion) alert(`Le serveur utilise une version différente de ce site. Certaines fonctionnalités peuvent ne pas fonctionner correctement.`)
 
 	// Si on a besoin d'un mot de passe
 	if(authRequired){
