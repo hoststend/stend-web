@@ -139,6 +139,25 @@ async function downloadAll(el){
 	setTimeout(() => el.removeAttribute('disabled'), 500)
 }
 
+// Prévisualiser un fichier
+async function previewFile(){
+	// On prend le premier fichier
+	var file = allFiles[0]
+
+	// On affiche le conteneur
+	document.getElementById('previewContainer').classList.remove('hidden')
+
+	// Si c'est une image
+	if(file.fileName.match(/\.(jpg|jpeg|png|gif|webp)$/i)){
+		document.getElementById('previewContent').innerHTML = `<img src="${apiBaseUrl + file.downloadLink}" class="m-auto p-2" style="max-height: ${document.getElementById('previewContent').offsetHeight - 100 + 'px'}">`
+	}
+
+	// Si c'est une vidéo
+	else if(file.fileName.match(/\.(mp4)$/i)){
+		document.getElementById('previewContent').innerHTML = `<video src="${apiBaseUrl + file.downloadLink}" class="m-auto p-2" style="max-height: ${document.getElementById('previewContent').offsetHeight - 100 + 'px'}" controls></video>`
+	}
+}
+
 // Quand la page est chargée
 window.onload = async function(){
 	// Si la clé de partage n'est pas définie
@@ -154,11 +173,24 @@ window.onload = async function(){
 
 	// Si c'est un fichier et non un groupe
 	if(!file.isGroup){
+		// On déterminera l'expiration du fichier
 		var expireSec = (file.expireDate - Date.now()) / 1000
+
+		// On modifie les textes
 		document.getElementById('download_title').innerText = 'Télécharger le fichier'
 		document.getElementById('download_subtitle').innerText = `Ce fichier a été partagé avec Stend. Il expire ${expireSec < 1 ? 'bientôt' : 'dans ' + formatDuration(expireSec)}.`
+
+		// On ajoute le fichier à la liste et sur la page
 		allFiles.push(file)
 		addFile(file)
+
+		// On ajoute le bouton "Prévisualiser" en fonction de l'extension
+		var fileExt = file.fileName.split('.').pop().toLowerCase()
+		if(['jpg','jpeg','png','gif','webp','mp4'].includes(fileExt)){
+			// On modifie le texte, et on affiche le bouton
+			document.getElementById('showPreview_button').innerText = `Prévisualiser l${fileExt == 'mp4' ? 'a vidéo' : "'image"}`
+			document.getElementById('showPreview_container').style.display = ''
+		}
 	}
 
 	// Enlever l'animation de chargement
