@@ -145,11 +145,17 @@ async function sendFile(file, isMultipleFiles=false, shareKey, expireTime){
 
 	// Si le transfert n'a pas pu être créé
 	if(createTransfert.error || createTransfert.statusCode) return alert("Une erreur est survenue lors de la création du transfert : " + createTransfert.message || createTransfert.error || createTransfert.statusCode || createTransfert)
-	
+
 	// Envoyer tous les chunks qu'on doit envoyer, un par un
 	return await new Promise(async (resolve, reject) => {
 		var alreadySentSize = 0
 		for(let i = 0; i < createTransfert.chunks.length; i++){
+			// Si c'est le premier chunk, on affiche la progression
+			if(i == 0){
+				document.getElementById('progress_bar').style.width = '0%'
+				document.getElementById('progress_text').innerText = '0%'
+			}
+
 			// Obtenir les infos sur le chunk qu'on va envoyer
 			var chunkInfo = createTransfert.chunks[i]
 
