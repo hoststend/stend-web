@@ -2,6 +2,7 @@
 var stendApiVersion = 12 // v1.2.0 --> 12 // TODO: doit être changer à chaque release de l'API
 var authPassword = localStorage.getItem("authPassword")
 var apiBaseUrl = document.head.getAttribute('apibaseurl')
+var showHtmlExtension = document.head.getAttribute('showhtmlextension') == 'true'
 var authRequired
 var serverInstance
 var disableAddingFileInput = false
@@ -264,7 +265,7 @@ async function sendAll(el){
 
 	// Copier le lien
 	try {
-		navigator.clipboard.writeText(`${location.origin}/d.html?${finalShareKey || (sendedFiles.length < 2 ? sendedFiles?.[0]?.shareKey || shareKey : shareKey)}`).catch(err => {})
+		navigator.clipboard.writeText(`${location.origin}/d${showHtmlExtension ? '.html' : ''}?${finalShareKey || (sendedFiles.length < 2 ? sendedFiles?.[0]?.shareKey || shareKey : shareKey)}`).catch(err => {})
 	} catch(e){}
 
 	// Afficher la section indiquant que le transfert est terminé
@@ -274,9 +275,10 @@ async function sendAll(el){
 		document.getElementById('secondZone_selfhostText').remove()
 		document.getElementById('secondZone_encryptionWarnText').remove()
 	} catch(e){}
-	document.getElementById('secondZone_title').insertAdjacentHTML('beforebegin', `<img class="mx-auto mb-4 rounded-lg max-[800px]:hidden" src="https://chart.googleapis.com/chart?cht=qr&chs=192x192&chld=L|0&chl=${encodeURIComponent(location.origin)}/d.html?${encodeURIComponent(finalShareKey || (sendedFiles.length < 2 ? sendedFiles?.[0]?.shareKey || shareKey : shareKey))}" alt="QR Code">`)
+	document.getElementById('secondZone_title').insertAdjacentHTML('beforebegin', `<img class="mx-auto mb-4 rounded-lg max-[800px]:hidden" src="https://chart.googleapis.com/chart?cht=qr&chs=192x192&chld=L|0&chl=${encodeURIComponent(location.origin)}/d${showHtmlExtension ? '.html' : ''}?${encodeURIComponent(finalShareKey || (sendedFiles.length < 2 ? sendedFiles?.[0]?.shareKey || shareKey : shareKey))}" alt="QR Code">`)
 	document.getElementById('dropzone').outerHTML = sections['sent']
-	document.getElementById('share_url').value = `${location.origin}/d.html?${finalShareKey || (sendedFiles.length < 2 ? sendedFiles?.[0]?.shareKey || shareKey : shareKey)}`
+	document.getElementById('share_url').value = `${location.origin}/d${showHtmlExtension ? '.html' : ''}?${finalShareKey || (sendedFiles.length < 2 ? sendedFiles?.[0]?.shareKey || shareKey : shareKey)}`
+	// TODO: utiliser showHtmlExtension partout
 }
 
 // Quand la page est chargée
@@ -407,7 +409,7 @@ window.onload = async function(){
 			code += `<div id="secondZone_selfhostText" class="relative mt-4 border-2 rounded-lg border-gris-200 max-[800px]:min-h-[99%] sm:h-3/4 flex justify-between px-2 xs:px-4 sm:px-6 md:px-8 py-5">
 			<div class="text-left">
 				<p class="text-base-200 dark:text-gris-100 text-sm sm:text-base font-semibold leading-snug truncateLine">${escapeHtml(fileInfo.name)}</p>
-				<a href="${location.origin}/d.html?${fileInfo.shareKey}" class="text-blue-500 dark:text-blue-400 text-xs sm:text-sm font-semibold leading-snug truncateLine">${location.origin.replace('http://','').replace('https://','')}/d.html?${fileInfo.shareKey}</a>
+				<a href="${location.origin}/d${showHtmlExtension ? '.html' : ''}?${fileInfo.shareKey}" class="text-blue-500 dark:text-blue-400 text-xs sm:text-sm font-semibold leading-snug truncateLine">${location.origin.replace('http://','').replace('https://','')}/d${showHtmlExtension ? '.html' : ''}?${fileInfo.shareKey}</a>
 			</div>
 		</div>`
 		}

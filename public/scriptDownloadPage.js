@@ -1,5 +1,6 @@
 // Quelques variables
 var apiBaseUrl = document.head.getAttribute('apibaseurl')
+var showHtmlExtension = document.head.getAttribute('showhtmlextension') == 'true'
 var shareKey = location.search.replace('?','')
 var allFiles = []
 
@@ -169,7 +170,7 @@ window.onload = async function(){
 		alert("Impossible de récupérer les informations du fichier. Le serveur externe est peut-être indisponible ?")
 		return location.href = '/'
 	}
-	if(file.statusCode || file.error || file.message) return location.href = 'expiredFile.html'
+	if(file.statusCode || file.error || file.message) return location.href = `expiredFile${showHtmlExtension ? '.html' : ''}`
 
 	// Si c'est un fichier et non un groupe
 	if(!file.isGroup){
@@ -212,7 +213,7 @@ window.onload = async function(){
 		}
 
 		// Si tous les fichiers sont supprimés/expirés
-		if(!document.getElementById('files').innerHTML) return location.href = 'expiredFile.html'
+		if(!document.getElementById('files').innerHTML) return location.href = `expiredFile${showHtmlExtension ? '.html' : ''}`
 	}
 
 	// Afficher le bouton "Tout télécharger"
