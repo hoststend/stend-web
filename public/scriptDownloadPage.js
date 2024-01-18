@@ -176,10 +176,11 @@ window.onload = async function(){
 	if(!file.isGroup){
 		// On déterminera l'expiration du fichier
 		var expireSec = (file.expireDate - Date.now()) / 1000
+		var doesNotExpire = expireSec > 10000000000
 
 		// On modifie les textes
 		document.getElementById('download_title').innerText = 'Télécharger le fichier'
-		document.getElementById('download_subtitle').innerText = `Ce fichier a été partagé avec Stend. Il expire ${expireSec < 1 ? 'bientôt' : 'dans ' + formatDuration(expireSec)}.`
+		document.getElementById('download_subtitle').innerText = `Ce fichier a été partagé avec Stend. ${doesNotExpire ? "Celui-ci n'" : 'Il '}expire ${expireSec < 1 ? 'bientôt' : doesNotExpire ? 'pas' : 'dans ' + formatDuration(expireSec)}.`
 
 		// On ajoute le fichier à la liste et sur la page
 		allFiles.push(file)
