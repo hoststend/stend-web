@@ -1,5 +1,4 @@
 // Quelques variables
-var stendApiVersion = 12 // v1.2.0 --> 12 // TODO: doit être changer à chaque release de l'API
 var authPassword = localStorage.getItem("authPassword")
 var apiBaseUrl = document.head.getAttribute('apibaseurl')
 var showHtmlExtension = document.head.getAttribute('showhtmlextension') == 'true'
@@ -278,7 +277,6 @@ async function sendAll(el){
 	document.getElementById('secondZone_title').insertAdjacentHTML('beforebegin', `<img class="mx-auto mb-4 rounded-lg max-[800px]:hidden" src="https://chart.googleapis.com/chart?cht=qr&chs=192x192&chld=L|0&chl=${encodeURIComponent(location.origin)}/d${showHtmlExtension ? '.html' : ''}?${encodeURIComponent(finalShareKey || (sendedFiles.length < 2 ? sendedFiles?.[0]?.shareKey || shareKey : shareKey))}" alt="QR Code">`)
 	document.getElementById('dropzone').outerHTML = sections['sent']
 	document.getElementById('share_url').value = `${location.origin}/d${showHtmlExtension ? '.html' : ''}?${finalShareKey || (sendedFiles.length < 2 ? sendedFiles?.[0]?.shareKey || shareKey : shareKey)}`
-	// TODO: utiliser showHtmlExtension partout
 }
 
 // Quand la page est chargée
@@ -295,10 +293,6 @@ window.onload = async function(){
 		document.getElementById('dropzone_explainText').removeAttribute('id')
 	}
 	authRequired = serverInstance.requirePassword
-
-	// Afficher un avertissement si on a pas la même version
-	var apiVersion = parseInt(`${serverInstance.apiVersion.split('.')[0]}${serverInstance.apiVersion.split('.')[1]}`)
-	if(serverInstance != '' && apiVersion != stendApiVersion) alert(`Le serveur utilise une version différente de ce site. Certaines fonctionnalités peuvent ne pas fonctionner correctement.`)
 
 	// Si on a besoin d'un mot de passe
 	if(authRequired){
