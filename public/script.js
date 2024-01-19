@@ -272,7 +272,7 @@ async function sendAll(el){
 	while(!sections['sent']) await new Promise(resolve => setTimeout(resolve, 300)) // attendre que la section soit importée
 	try {
 		document.getElementById('secondZone_selfhostText').remove()
-		document.getElementById('secondZone_encryptionWarnText').remove()
+		document.getElementById('secondZone_fileDisclaimer').remove()
 	} catch(e){}
 	document.getElementById('secondZone_title').insertAdjacentHTML('beforebegin', `<img class="mx-auto mb-4 rounded-lg max-[800px]:hidden" src="https://chart.googleapis.com/chart?cht=qr&chs=192x192&chld=L|0&chl=${encodeURIComponent(location.origin)}/d${showHtmlExtension ? '.html' : ''}?${encodeURIComponent(finalShareKey || (sendedFiles.length < 2 ? sendedFiles?.[0]?.shareKey || shareKey : shareKey))}" alt="QR Code">`)
 	document.getElementById('dropzone').outerHTML = sections['sent']
