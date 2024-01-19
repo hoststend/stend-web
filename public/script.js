@@ -293,6 +293,7 @@ window.onload = async function(){
 		document.getElementById('dropzone_explainText').removeAttribute('id')
 	}
 	authRequired = serverInstance.requirePassword
+	maxTransfersInMerge = serverInstance.maxTransfersInMerge || 10
 
 	// Si on a besoin d'un mot de passe
 	if(authRequired){
@@ -363,7 +364,7 @@ window.onload = async function(){
 
 			// Si on a trop ou pas assez de fichiers, on prévient
 			if(filesToSend.length < 1) return dropzoneError("Vous devez envoyer au moins un fichier (dossiers non autorisés)")
-			if(filesToSend.length > 10) return dropzoneError("Vous ne pouvez pas envoyer plus de 10 fichiers à la fois")
+			if(filesToSend.length > maxTransfersInMerge) return dropzoneError(`Vous ne pouvez pas envoyer plus de ${maxTransfersInMerge} fichiers à la fois`)
 
 			// Si on avait une erreur, on la supprime
 			if(document.getElementById('dropzone_explainText').classList.contains('showingerror')) dropzoneRemoveError()
