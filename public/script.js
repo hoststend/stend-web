@@ -281,6 +281,12 @@ async function sendAll(el){
 
 // Quand la page est chargée
 window.onload = async function(){
+	// Si on est hors connexion
+	if(!navigator.onLine){
+		document.getElementById('dropzone_svg').remove()
+		return document.getElementById('loadingText').innerHTML = `Vous semblez être hors connexion. Connectez-vous à internet et <a href="javascript:location.reload()" class="text-blue-500 dark:text-blue-400 font-semibold">réessayer</a>.`
+	}
+
 	// Obtenir le mot de passe d'authentification
 	let authPassword = localStorage.getItem("authPassword")
 
