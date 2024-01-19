@@ -64,7 +64,7 @@ async function downloadAll(el){
 	// Importer Material Toast
 	var script = document.createElement('script')
 	script.setAttribute('fetchpriority', 'high')
-	script.setAttribute('src', 'mdtoast.js')
+	script.setAttribute('src', 'js/mdtoast.js')
 	document.head.appendChild(script)
 
 	// Attendre que le script soit chargé
@@ -98,7 +98,7 @@ async function downloadAll(el){
 		// Importer JSZip
 		var script = document.createElement('script')
 		script.setAttribute('fetchpriority', 'high')
-		script.setAttribute('src', 'jszip.min.js')
+		script.setAttribute('src', 'js/jszip.min.js')
 		document.head.appendChild(script)
 
 		// Attendre que le script soit chargé
