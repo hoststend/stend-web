@@ -20,7 +20,6 @@ async function updateCache(){
 		'js/mdtoast.js',
 		'sw.js',
 		'js/jszip.min.js',
-		'js/multishort.js',
 		'section/optionsBeforeSend.html',
 		'section/optionsBeforeSend',
 		'section/sending.html',
