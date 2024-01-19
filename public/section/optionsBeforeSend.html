@@ -39,6 +39,16 @@
 				<input id="options_shareKey" type="text" placeholder="Facultatif, entre 1 et 30 caractères" class="mt-2 input input-bordered text-base-200 dark:text-gris-200 border-gris-300 dark:border-gris-400 w-full" maxlength="30"/>
 			</div>
 
+			<div class="mt-4">
+				<!-- <p class="text-base-200 dark:text-gris-100 font-semibold">Raccourcir le lien ?</p>
+				<input id="options_shareKey" type="text" placeholder="Facultatif, entre 1 et 30 caractères" class="mt-2 input input-bordered text-base-200 dark:text-gris-200 border-gris-300 dark:border-gris-400 w-full" maxlength="30"/> -->
+
+				<label class="label cursor-pointer">
+					<span class="text-base-200 dark:text-gris-100 font-medium label-text">Raccourcir le lien ?</span>
+					<input id="options_shortUrl" type="checkbox" class="checkbox"/>
+				</label>
+			</div>
+
 			<button id="clickToSendAll" onclick="sendAll(this)" type="button" class="mt-6 w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Transférer</button>
 		</div>
 	</div>

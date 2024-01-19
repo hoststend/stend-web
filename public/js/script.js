@@ -222,6 +222,7 @@ async function sendAll(el){
 	// Obtenir les options du transfert
 	let shareKey = document.getElementById('options_shareKey').value
 	let expireTime = document.getElementById('options_expireTime').value * 60
+	var shortUrl = document.getElementById('options_shortUrl').checked
 
 	// Afficher la section de chargement
 	while(!sections['sending']) await new Promise(resolve => setTimeout(resolve, 300)) // attendre que la section soit importée
@@ -262,9 +263,25 @@ async function sendAll(el){
 		else finalShareKey = mergeTransferts.shareKey
 	}
 
+	// Si on doit racourcir l'URL
+	if(shortUrl){
+		// On modifie la progression
+		document.getElementById('progress_text').innerText = 'Raccourcissement de l\'URL...'
+
+		// On raccourcit l'URL
+		shortUrl = await moreshort.short(`${location.origin}/d${showHtmlExtension ? '.html' : ''}?${finalShareKey || (sendedFiles.length < 2 ? sendedFiles?.[0]?.shareKey || shareKey : shareKey)}`, 's.jk.al').catch(err => { return { error: true, message: err.message || err } })
+
+		// Si on a une erreur
+		if(typeof shortUrl != 'string' || shortUrl.error){
+			console.error("Impossible de raccourcir l'URL : ", shortUrl)
+			console.error(shortUrl)
+			shortUrl = null
+		}
+	}
+
 	// Copier le lien
 	try {
-		navigator.clipboard.writeText(`${location.origin}/d${showHtmlExtension ? '.html' : ''}?${finalShareKey || (sendedFiles.length < 2 ? sendedFiles?.[0]?.shareKey || shareKey : shareKey)}`).catch(err => {})
+		navigator.clipboard.writeText(shortUrl || `${location.origin}/d${showHtmlExtension ? '.html' : ''}?${finalShareKey || (sendedFiles.length < 2 ? sendedFiles?.[0]?.shareKey || shareKey : shareKey)}`).catch(err => {})
 	} catch(e){}
 
 	// Afficher la section indiquant que le transfert est terminé
@@ -276,7 +293,7 @@ async function sendAll(el){
 	} catch(e){}
 	document.getElementById('secondZone_title').insertAdjacentHTML('beforebegin', `<img class="mx-auto mb-4 rounded-lg max-[800px]:hidden" src="https://chart.googleapis.com/chart?cht=qr&chs=192x192&chld=L|0&chl=${encodeURIComponent(location.origin)}/d${showHtmlExtension ? '.html' : ''}?${encodeURIComponent(finalShareKey || (sendedFiles.length < 2 ? sendedFiles?.[0]?.shareKey || shareKey : shareKey))}" alt="QR Code">`)
 	document.getElementById('dropzone').outerHTML = sections['sent']
-	document.getElementById('share_url').value = `${location.origin}/d${showHtmlExtension ? '.html' : ''}?${finalShareKey || (sendedFiles.length < 2 ? sendedFiles?.[0]?.shareKey || shareKey : shareKey)}`
+	document.getElementById('share_url').value = shortUrl || `${location.origin}/d${showHtmlExtension ? '.html' : ''}?${finalShareKey || (sendedFiles.length < 2 ? sendedFiles?.[0]?.shareKey || shareKey : shareKey)}`
 }
 
 // Quand la page est chargée
@@ -421,6 +438,13 @@ window.onload = async function(){
 	var script = document.createElement('script')
 	script.setAttribute('fetchpriority', 'low')
 	script.setAttribute('src', 'https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js')
+	script.setAttribute('defer', '')
+	document.head.appendChild(script)
+
+	// Importer MoreShort
+	var script = document.createElement('script')
+	script.setAttribute('fetchpriority', 'low')
+	script.setAttribute('src', 'https://cdn.jsdelivr.net/npm/moreshort/dist/browser.js')
 	script.setAttribute('defer', '')
 	document.head.appendChild(script)
 

@@ -8,6 +8,13 @@
 	}
 }
 
+/* Couleur de checkbox sur thème claire (daisyUI) */
+@media (prefers-color-scheme: light) {
+	.checkbox {
+		--chkbg: #1982C4;
+	}
+}
+
 /* Safezone sur les iPhones borderless */
 html {
 	min-height: calc(100% + env(safe-area-inset-top));
