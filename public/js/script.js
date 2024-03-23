@@ -182,23 +182,39 @@ async function sendFile(file, isMultipleFiles=false, shareKey, expireTime){
 				document.getElementById('progress_text').innerText = percentCompleted + `% | ${i+1}/${createTransfert.chunks.length} chunk${createTransfert.chunks.length > 1 ? 's' : ''}`
 			}
 
-			// On envoie le chunk avec Axios (pour suivre la progression)
-			var sendChunk = await axios.put(`${apiBaseUrl}${chunkInfo.uploadPath}`, formData, {
-				onUploadProgress: progressEvent => {
-					console.log(progressEvent)
-					let percentCompleted = Math.round((alreadySentSize + progressEvent.loaded) * 100 / file.size)
-					console.log(percentCompleted)
-					document.getElementById('progress_bar').style.width = percentCompleted + '%'
-					document.getElementById('progress_text').innerText = percentCompleted + `% | ${i+1}/${createTransfert.chunks.length} chunk${createTransfert.chunks.length > 1 ? 's' : ''}`
-				}
-			}).then(res => res.data).catch(err => { return { error:true, message: `${err.error || err.message || err}. Note : l'erreur "failed to fetch" peut apparaître si vous essayez d'envoyer un dossier.` } })
+			// On envoie le chunk en suivant la progression
+			// var sendChunk = await axios.put(`${apiBaseUrl}${chunkInfo.uploadPath}`, formData, {
+			// 	onUploadProgress: progressEvent => {
+			// 		console.log(progressEvent)
+			// 		let percentCompleted = Math.round((alreadySentSize + progressEvent.loaded) * 100 / file.size)
+			// 		console.log(percentCompleted)
+			// 		document.getElementById('progress_bar').style.width = percentCompleted + '%'
+			// 		document.getElementById('progress_text').innerText = percentCompleted + `% | ${i+1}/${createTransfert.chunks.length} chunk${createTransfert.chunks.length > 1 ? 's' : ''}`
+			// 	}
+			// }).then(res => res.data).catch(err => { return { error:true, message: `${err.error || err.message || err}. Note : l'erreur "failed to fetch" peut apparaître si vous essayez d'envoyer un dossier.` } })
+			// alreadySentSize += chunkInfo.size
+			var xhr = new XMLHttpRequest()
+			xhr.open('PUT', `${apiBaseUrl}${chunkInfo.uploadPath}`, true)
+			xhr.upload.onprogress = function(e){
+				console.log(e)
+				let percentCompleted = Math.round((alreadySentSize + e.loaded) * 100 / file.size)
+				if(percentCompleted > 100) percentCompleted = 100 // Common XMLHttpRequest Lose mais fetch supporte pas le suivi de la progression 💀
+				document.getElementById('progress_bar').style.width = percentCompleted + '%'
+				document.getElementById('progress_text').innerText = percentCompleted + `% | ${i+1}/${createTransfert.chunks.length} chunk${createTransfert.chunks.length > 1 ? 's' : ''}`
+			}
+			await new Promise((resolve, reject) => {
+				xhr.onload = resolve
+				xhr.onerror = reject
+				xhr.send(formData)
+			})
+			sendChunk = xhr.responseText
 			alreadySentSize += chunkInfo.size
 
 			// Tenter de convertir la réponse en JSON
-			try { sendChunk = JSON.parse(sendChunk) } catch(e){}
-
+			try { if(sendChunk?.length) sendChunk = JSON.parse(sendChunk) } catch(e){ console.error("Failed to parse JSON response from chunk", e) }
+console.log(sendChunk)
 			// Si on a une erreur
-			if(sendChunk.error || sendChunk.statusCode) return alert("Une erreur est survenue lors de l'envoi d'un chunk : " + sendChunk.message || sendChunk.error || sendChunk.statusCode || sendChunk)
+			if(sendChunk.error || sendChunk.statusCode) return alert(`Une erreur est survenue lors de l'envoi d'un chunk : ${sendChunk.message || sendChunk.error || sendChunk.statusCode || sendChunk}. Note : cette erreur peut apparaître si vous essayez d'envoyer un dossier.`)
 
 			// Au contraire, si le fichier est envoyé
 			else if(sendChunk){
@@ -433,13 +449,6 @@ window.onload = async function(){
 		}
 		document.getElementById('secondZone_subtitle').innerHTML = code
 	}
-
-	// Importer Axios
-	var script = document.createElement('script')
-	script.setAttribute('fetchpriority', 'low')
-	script.setAttribute('src', 'https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js')
-	script.setAttribute('defer', '')
-	document.head.appendChild(script)
 
 	// Importer MoreShort
 	var script = document.createElement('script')
