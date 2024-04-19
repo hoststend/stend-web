@@ -36,6 +36,11 @@ function escapeHtml(text){
 	return text?.replace(/&/g, '&amp;')?.replace(/</g, '&lt;')?.replace(/>/g, '&gt;')?.replace(/"/g, '&quot;')?.replace(/'/g, '&#039;')
 }
 
+// Fonction pour déterminer le thème utilisé
+function getTheme(){
+	return window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
+}
+
 // Ajouter un fichier à l'historique
 function addFileToHistory(file){
 	console.log('adding to historic: ', file)
@@ -307,7 +312,7 @@ async function sendAll(el){
 		document.getElementById('secondZone_selfhostText').remove()
 		document.getElementById('secondZone_fileDisclaimer').remove()
 	} catch(e){}
-	document.getElementById('secondZone_title').insertAdjacentHTML('beforebegin', `<img class="mx-auto mb-4 rounded-lg max-[800px]:hidden" src="https://chart.googleapis.com/chart?cht=qr&chs=192x192&chld=L|0&chl=${encodeURIComponent(location.origin)}/d${showHtmlExtension ? '.html' : ''}?${encodeURIComponent(finalShareKey || (sendedFiles.length < 2 ? sendedFiles?.[0]?.shareKey || shareKey : shareKey))}" alt="QR Code">`)
+	document.getElementById('secondZone_title').insertAdjacentHTML('beforebegin', `<img class="mx-auto mb-4 rounded-lg max-[800px]:hidden" src="https://api.qrserver.com/v1/create-qr-code/?data=${encodeURIComponent(location.origin)}/d${showHtmlExtension ? '.html' : ''}?${encodeURIComponent(finalShareKey || (sendedFiles.length < 2 ? sendedFiles?.[0]?.shareKey || shareKey : shareKey))}&size=192x192&color=${theme == 'dark' ? 'fff' : '000'}&bgcolor=${theme == 'dark' ? '16161F' : 'E6E5E6'}" alt="QR Code">`)
 	document.getElementById('dropzone').outerHTML = sections['sent']
 	document.getElementById('share_url').value = shortUrl || `${location.origin}/d${showHtmlExtension ? '.html' : ''}?${finalShareKey || (sendedFiles.length < 2 ? sendedFiles?.[0]?.shareKey || shareKey : shareKey)}`
 }
