@@ -290,7 +290,7 @@ async function sendAll(el){
 		document.getElementById('progress_text').innerText = 'Raccourcissement de l\'URL...'
 
 		// On raccourcit l'URL
-		shortUrl = await moreshort.short(`${location.origin}/d${showHtmlExtension ? '.html' : ''}?${finalShareKey || (sendedFiles.length < 2 ? sendedFiles?.[0]?.shareKey || shareKey : shareKey)}`, 's.jk.al').catch(err => { return { error: true, message: err.message || err } })
+		shortUrl = await moreshort.short(`${location.origin}/d${showHtmlExtension ? '.html' : ''}?${finalShareKey || (sendedFiles.length < 2 ? sendedFiles?.[0]?.shareKey || shareKey : shareKey)}`, 'mdrr.fr').catch(err => { return { error: true, message: err.message || err } })
 
 		// Si on a une erreur
 		if(typeof shortUrl != 'string' || shortUrl.error){
