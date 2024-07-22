@@ -7,8 +7,8 @@ Ce repo GitHub contient le code source du client WEB de Stend, permettant de té
 ![Accueil](https://stend-docs.johanstick.fr/_next/image?url=%2F_next%2Fstatic%2Fmedia%2Fdemo_homepage.90c32aac.png&w=1920&q=75)
 ![Téléchargement](https://stend-docs.johanstick.fr/_next/image?url=%2F_next%2Fstatic%2Fmedia%2Fdemo_downloadPage.5b317e36.png&w=1920&q=75)
 
-Pour plus d'informations sur ce client, vous pouvez lire [la page de la documentation dédiée](https://stend-docs.johanstick.fr/web-docs/selfhost).
+Pour plus d'informations sur ce client, vous pouvez lire [la page de la documentation dédiée](https://stend.johanstick.fr/web-docs/intro).
 
 ### Licence
 
-MIT © [Johan](https://johanstick.fr)
+MIT © [Johan](https://johanstick.fr). Soutenez ce projet via [Ko-Fi](https://ko-fi.com/johan_stickman) ou [PayPal](https://paypal.me/moipastoii) si vous souhaitez m'aider 💙
