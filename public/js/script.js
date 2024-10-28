@@ -29,6 +29,49 @@ function removeLoading(){
 	document.getElementById('container').classList.remove('hidden')
 }
 
+// Copier un texte dans le presse-papier
+function copyClipboard(text){
+	var failed = false
+	var error
+
+	// 1ère méthode
+	if(navigator?.clipboard?.writeText){
+		try {
+			navigator.clipboard.writeText(text).catch(err => { console.error(err), failed = true, error = err })
+		} catch(e){
+			console.error(e)
+			failed = true
+			error = e
+		}
+	}
+
+	// 2ème méthode
+	if(failed || !navigator?.clipboard?.writeText){
+		try {
+			var el = document.createElement('textarea')
+			el.value = text
+			el.setAttribute('readonly', '')
+			el.style.position = 'absolute'
+			el.style.left = '-9999px'
+			document.body.appendChild(el)
+			el.select()
+			document.execCommand('copy')
+			document.body.removeChild(el)
+		} catch(e){
+			console.error(e)
+			failed = true
+			error = e
+		}
+	}
+
+	// Afficher une alerte si on a raté : sauf, si l'erreur est lié au fait que la fenêtre n'est pas focus
+	if(failed && error?.message != 'Document is not focused.') {
+		alert(`Le texte « ${text.toString()} » n'a pas pu être copié dans le presse-papier.\n${window.location.protocol == 'http:' ? '⚠️ Certains navigateurs bloquent la copie dans le presse-papier lorsque vous êtes dans un environnement non sécurisé (localhost, http://). Cela peut être la cause de l\'échec.' : ''}\n\n${error?.stack || error?.message || error}`)
+	}
+
+	return true
+}
+
 // Fonction pour échapper les caractères spéciaux
 function escapeHtml(text){
 	if(!text) return text
@@ -301,9 +344,7 @@ async function sendAll(el){
 	}
 
 	// Copier le lien
-	try {
-		navigator.clipboard.writeText(shortUrl || `${location.origin}/d${showHtmlExtension ? '.html' : ''}?${finalShareKey || (sendedFiles.length < 2 ? sendedFiles?.[0]?.shareKey || shareKey : shareKey)}`).catch(err => {})
-	} catch(e){}
+	copyClipboard(shortUrl || `${location.origin}/d${showHtmlExtension ? '.html' : ''}?${finalShareKey || (sendedFiles.length < 2 ? sendedFiles?.[0]?.shareKey || shareKey : shareKey)}`)
 
 	// Afficher la section indiquant que le transfert est terminé
 	isSending = false
