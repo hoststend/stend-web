@@ -1,25 +1,28 @@
-services: 
+services:
   stend-web:
     build:
       context: .
     image: stend-web
     environment:
-      # Affichage de la taille maximale pour un seul fichier sur la page d'accueil du site
+      # Texte affiché sur le site pour indiquer la taille maximale autorisée par fichier
       FILE_MAX_SIZE: 5 GB
-      # URL de l'API, les adresses IP locales (localhost, 127.0.0.1 etc...) ne corresponderaient pas forcément à votre configuration
-      API_BASE_URL: http://localhost:3000
+
+      # URL de l'API, doit pouvoir être accédée par le client, une erreur sera affichée dans la console du navigateur dans le cas contraire
+      # Une adresse IP locale (localhost, 127.0.0.1, ...) ne fonctionnera pas si l'utilisateur du site n'est pas sur le même réseau que le serveur
+      API_BASE_URL: https://stend-demo-api.exemple.com
+
       # Port sur lequel le serveur web écoutera
       PORT: 80
+
       # Afficher ".html" dans le chemin des fichiers ?
-      # Exemple - true : https://stend.example.com/d.html?frezazer - Il est préférable d'utiliser cette option
-      # Exemple - false : https://stend.example.com/d?frezazer
-      # Sur certains hébergeurs comme Vercel, vous pouvez utiliser la propriété "cleanUrls" du vercel.json, puis définir la variable sur false
+      # Le serveur intégré dans cette image est capable de servir des fichiers HTML sans l'extension ".html" dans l'URL
+      # Exemple - false : https://stend.example.com/d?frezazer (recommandé)
+      # Exemple - true : https://stend.example.com/d.html?frezazer
       SHOW_HTML_EXTENSION: false
     ports:
       - 80:80
     volumes:
       - stend_web:/usr/src/app/build
 
-volumes:
-  stend_web:
-
+  volumes:
+    stend_web:
