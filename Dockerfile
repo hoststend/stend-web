@@ -14,13 +14,10 @@ COPY . .
 # Install dependencies if not found, which shouldn't happen
 RUN if [ ! -d "node_modules" ]; then npm install --omit=dev --no-audit --no-package-lock-only --no-update-notifier --no-fund; fi
 
-# Build the application only once during the image creation.
-RUN npm run build
-
 # Expose the port that the application listens on
 ARG DEFAULT_PORT=80
 ENV PORT ${DEFAULT_PORT}
 EXPOSE ${DEFAULT_PORT}
 
 # Run the application
-CMD npm run start -- --no-build
+CMD npm run start
