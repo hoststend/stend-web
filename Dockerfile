@@ -16,7 +16,7 @@ RUN if [ ! -d "node_modules" ]; then npm install --omit=dev --no-audit --no-pack
 
 # Expose the port that the application listens on
 ARG DEFAULT_PORT=80
-ENV PORT ${DEFAULT_PORT}
+ENV PORT=${DEFAULT_PORT}
 EXPOSE ${DEFAULT_PORT}
 
 # Run the application
